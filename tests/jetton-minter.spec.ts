@@ -61,7 +61,7 @@ describe("jetton_minter", () => {
       const QUERY_ID = BigInt(0xff00ff00f);
       const AMOUNT = new Coins(1);
       const FORWARD_AMOUNT = new Coins(0.1);
-      const GAS_FEE = new Coins(0.015); // compute_gas_fee + fwd_fee
+      const GAS_FEE = new Coins(0.03); // 2 * (compute_gas_fee + fwd_fee * 1.5)
 
       const RECIPIENT = generateAddress();
       const RESPONSE_DESTINATION = generateAddress();

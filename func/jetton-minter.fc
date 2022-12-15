@@ -49,7 +49,7 @@ cell internal_transfer::build_message(cell body, int amount, slice recipient) in
     cs~load_coins(); ;; skip value
     cs~skip_bits(1); ;; skip extracurrency collection
     cs~load_coins(); ;; skip ihr_fee
-    int fwd_fee = cs~load_coins(); ;; we use message fwd_fee for estimation of provide_wallet_address cost
+    int fwd_fee = muldiv(cs~load_coins(), 3, 2); ;; we use message fwd_fee for estimation of provide_wallet_address cost
 
     int op = in_msg_body~load_uint(32);
     int query_id = in_msg_body~load_uint(64);
@@ -63,7 +63,7 @@ cell internal_transfer::build_message(cell body, int amount, slice recipient) in
         cell forward_payload = in_msg_body~load_maybe_ref();
         slice return_excesses_to = in_msg_body~load_msg_addr();
 
-        throw_unless(75, msg_value > amount + forward_amount + 2 * fwd_fee + gas_consumption());
+        throw_unless(75, msg_value > amount + forward_amount + 2 * (fwd_fee + gas_consumption()));
 
         int total_supply = get_total_supply();
 

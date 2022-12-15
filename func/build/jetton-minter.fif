@@ -125,22 +125,24 @@ PROGRAM{
       3 BLKDROP	// 
     }>	//  msg_value in_msg_body cs
     LDMSGADDR	//  msg_value in_msg_body sender_address cs
-    LDMSGADDR	//  msg_value in_msg_body sender_address _215 _214
+    LDMSGADDR	//  msg_value in_msg_body sender_address _218 _217
     NIP	//  msg_value in_msg_body sender_address cs
-    LDVARUINT16	//  msg_value in_msg_body sender_address _217 _216
+    LDVARUINT16	//  msg_value in_msg_body sender_address _220 _219
     NIP	//  msg_value in_msg_body sender_address cs
     1 PUSHINT	//  msg_value in_msg_body sender_address cs _20=1
     SDSKIPFIRST	//  msg_value in_msg_body sender_address cs
-    LDVARUINT16	//  msg_value in_msg_body sender_address _219 _218
+    LDVARUINT16	//  msg_value in_msg_body sender_address _222 _221
     NIP	//  msg_value in_msg_body sender_address cs
-    LDVARUINT16	//  msg_value in_msg_body sender_address _221 _220
-    DROP	//  msg_value in_msg_body sender_address fwd_fee
+    LDVARUINT16	//  msg_value in_msg_body sender_address _224 _223
+    DROP	//  msg_value in_msg_body sender_address _25
+    3 PUSHINT	//  msg_value in_msg_body sender_address _25 _27=3
+    1 MULRSHIFT#	//  msg_value in_msg_body sender_address fwd_fee
     s0 s2 XCHG	//  msg_value fwd_fee sender_address in_msg_body
     32 LDU	//  msg_value fwd_fee sender_address op in_msg_body
     64 LDU	//  msg_value fwd_fee sender_address op query_id in_msg_body
-    0x864e0716 PUSHINT	//  msg_value fwd_fee sender_address op query_id in_msg_body _35
-    s3 s(-1) PUXC	//  msg_value fwd_fee sender_address op query_id in_msg_body op _35
-    EQUAL	//  msg_value fwd_fee sender_address op query_id in_msg_body _36
+    0x864e0716 PUSHINT	//  msg_value fwd_fee sender_address op query_id in_msg_body _38
+    s3 s(-1) PUXC	//  msg_value fwd_fee sender_address op query_id in_msg_body op _38
+    EQUAL	//  msg_value fwd_fee sender_address op query_id in_msg_body _39
     IFJMP:<{	//  msg_value fwd_fee sender_address op query_id in_msg_body
       2 2 BLKDROP2	//  msg_value fwd_fee query_id in_msg_body
       LDVARUINT16	//  msg_value fwd_fee query_id amount in_msg_body
@@ -149,52 +151,52 @@ PROGRAM{
       force_chain CALLDICT
       LDVARUINT16	//  msg_value fwd_fee query_id amount recipient forward_amount in_msg_body
       LDOPTREF	//  msg_value fwd_fee query_id amount recipient forward_amount forward_payload in_msg_body
-      LDMSGADDR	//  msg_value fwd_fee query_id amount recipient forward_amount forward_payload _235 _234
+      LDMSGADDR	//  msg_value fwd_fee query_id amount recipient forward_amount forward_payload _238 _237
       DROP	//  msg_value fwd_fee query_id amount recipient forward_amount forward_payload return_excesses_to
       s4 s2 PUSH2	//  msg_value fwd_fee query_id amount recipient forward_amount forward_payload return_excesses_to amount forward_amount
-      ADD	//  msg_value fwd_fee query_id amount recipient forward_amount forward_payload return_excesses_to _54
-      s0 s7 XCHG	//  msg_value _54 query_id amount recipient forward_amount forward_payload return_excesses_to fwd_fee
-      1 LSHIFT#	//  msg_value _54 query_id amount recipient forward_amount forward_payload return_excesses_to _56
-      s1 s7 XCHG	//  msg_value return_excesses_to query_id amount recipient forward_amount forward_payload _54 _56
-      ADD	//  msg_value return_excesses_to query_id amount recipient forward_amount forward_payload _57
-      10000000 PUSHINT	//  msg_value return_excesses_to query_id amount recipient forward_amount forward_payload _57 _58
-      ADD	//  msg_value return_excesses_to query_id amount recipient forward_amount forward_payload _59
-      s1 s7 XCHG	//  forward_payload return_excesses_to query_id amount recipient forward_amount msg_value _59
-      GREATER	//  forward_payload return_excesses_to query_id amount recipient forward_amount _60
+      ADD	//  msg_value fwd_fee query_id amount recipient forward_amount forward_payload return_excesses_to _57
+      10000000 PUSHINT	//  msg_value fwd_fee query_id amount recipient forward_amount forward_payload return_excesses_to _57 _59
+      s1 s8 XCHG	//  msg_value _57 query_id amount recipient forward_amount forward_payload return_excesses_to fwd_fee _59
+      ADD	//  msg_value _57 query_id amount recipient forward_amount forward_payload return_excesses_to _60
+      1 LSHIFT#	//  msg_value _57 query_id amount recipient forward_amount forward_payload return_excesses_to _61
+      s1 s7 XCHG	//  msg_value return_excesses_to query_id amount recipient forward_amount forward_payload _57 _61
+      ADD	//  msg_value return_excesses_to query_id amount recipient forward_amount forward_payload _62
+      s1 s7 XCHG	//  forward_payload return_excesses_to query_id amount recipient forward_amount msg_value _62
+      GREATER	//  forward_payload return_excesses_to query_id amount recipient forward_amount _63
       75 THROWIFNOT
       get_total_supply INLINECALLDICT	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply
       s3 PUSH	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply amount
       ADD	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply
-      10000000 PUSHINT	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _65
-      OVER	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _65 total_supply
-      ADD	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _66
-      0 PUSHINT	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _66 _67=0
+      10000000 PUSHINT	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _68
+      OVER	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _68 total_supply
+      ADD	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _69
+      0 PUSHINT	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _69 _70=0
       RAWRESERVE
-      0x178d4519 PUSHINT	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _70
-      NEWC	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _70 _71
-      32 STU	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _73
-      s1 s5 XCHG	//  forward_payload return_excesses_to total_supply amount recipient forward_amount query_id _73
-      64 STU	//  forward_payload return_excesses_to total_supply amount recipient forward_amount _75
-      s3 PUSH	//  forward_payload return_excesses_to total_supply amount recipient forward_amount _75 amount
-      STVARUINT16	//  forward_payload return_excesses_to total_supply amount recipient forward_amount _76
-      MYADDR	//  forward_payload return_excesses_to total_supply amount recipient forward_amount _76 _77
-      STSLICER	//  forward_payload return_excesses_to total_supply amount recipient forward_amount _78
-      s0 s5 XCHG2	//  forward_payload forward_amount total_supply amount recipient _78 return_excesses_to
-      STSLICER	//  forward_payload forward_amount total_supply amount recipient _79
-      s0 s4 XCHG2	//  forward_payload recipient total_supply amount _79 forward_amount
-      STVARUINT16	//  forward_payload recipient total_supply amount _80
-      s1 s4 XCHG	//  amount recipient total_supply forward_payload _80
-      STOPTREF	//  amount recipient total_supply _81
+      0x178d4519 PUSHINT	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _73
+      NEWC	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _73 _74
+      32 STU	//  forward_payload return_excesses_to query_id amount recipient forward_amount total_supply _76
+      s1 s5 XCHG	//  forward_payload return_excesses_to total_supply amount recipient forward_amount query_id _76
+      64 STU	//  forward_payload return_excesses_to total_supply amount recipient forward_amount _78
+      s3 PUSH	//  forward_payload return_excesses_to total_supply amount recipient forward_amount _78 amount
+      STVARUINT16	//  forward_payload return_excesses_to total_supply amount recipient forward_amount _79
+      MYADDR	//  forward_payload return_excesses_to total_supply amount recipient forward_amount _79 _80
+      STSLICER	//  forward_payload return_excesses_to total_supply amount recipient forward_amount _81
+      s0 s5 XCHG2	//  forward_payload forward_amount total_supply amount recipient _81 return_excesses_to
+      STSLICER	//  forward_payload forward_amount total_supply amount recipient _82
+      s0 s4 XCHG2	//  forward_payload recipient total_supply amount _82 forward_amount
+      STVARUINT16	//  forward_payload recipient total_supply amount _83
+      s1 s4 XCHG	//  amount recipient total_supply forward_payload _83
+      STOPTREF	//  amount recipient total_supply _84
       ENDC	//  amount recipient total_supply internal_transfer_body
       2SWAP	//  total_supply internal_transfer_body amount recipient
-      internal_transfer::build_message INLINECALLDICT	//  total_supply _83
-      128 PUSHINT	//  total_supply _83 _84
+      internal_transfer::build_message INLINECALLDICT	//  total_supply _86
+      128 PUSHINT	//  total_supply _86 _87
       SENDRAWMSG
       set_total_supply INLINECALLDICT
     }>	//  msg_value fwd_fee sender_address op query_id in_msg_body
-    0x84106950 PUSHINT	//  msg_value fwd_fee sender_address op query_id in_msg_body _87
-    s3 s(-1) PUXC	//  msg_value fwd_fee sender_address op query_id in_msg_body op _87
-    EQUAL	//  msg_value fwd_fee sender_address op query_id in_msg_body _88
+    0x84106950 PUSHINT	//  msg_value fwd_fee sender_address op query_id in_msg_body _90
+    s3 s(-1) PUXC	//  msg_value fwd_fee sender_address op query_id in_msg_body op _90
+    EQUAL	//  msg_value fwd_fee sender_address op query_id in_msg_body _91
     IFJMP:<{	//  msg_value fwd_fee sender_address op query_id in_msg_body
       s2 POP
       s3 POP
@@ -202,104 +204,104 @@ PROGRAM{
       s0 s2 XCHG	//  sender_address query_id in_msg_body
       LDVARUINT16	//  sender_address query_id amount in_msg_body
       LDMSGADDR	//  sender_address query_id amount wallet_owner in_msg_body
-      MYADDR	//  sender_address query_id amount wallet_owner in_msg_body _96
-      B{b5ee9c724102120100033f000114ff00f4a413f4bcf2c80b0102016202030202cc0405001ba0f605da89a1f401f481f481a8610201d40607020120080900c30831c02497c138007434c0c05c6c2544d7c0fc03383e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7e08403e29fa954882ea54c4d167c0278208405e3514654882ea58c511100fc02b80d60841657c1ef2ea4d67c02f817c12103fcbc2000113e910c1c2ebcb853600201200a0b0083d40106b90f6a2687d007d207d206a1802698fc1080bc6a28ca9105d4108420834a809dd0958f97162e99f98fd001809d02811e428027d012c678b00e78b6664f6aa401f1503d33ffa00fa4021f001ed44d0fa00fa40fa40d4305136a1522ac705f2e2c128c2fff2e2c254344270542013541403c85004fa0258cf1601cf16ccc922c8cb0112f400f400cb00c920f9007074c8cb02ca07cbffc9d004fa40f40431fa0020d749c200f2e2c4778018c8cb055008cf1670fa0217cb6b13cc80c0201200d0e00ae8210178d4519c8cb1f19cb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25008a813a08208989680aa008208989680a0a014bcf2e2c504c98040fb001023c85004fa0258cf1601cf16ccc9ed5403f73b51343e803e903e90350c0234cffe80145468017e903e9014d6f1c1551cdb5c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0327e401c1d3232c0b281f2fff274140371c1472c7cb8b0c2be80146a2860822625a020822625a004ad822860822625a028062849f8c3c975c2c070c008e00f101100f13b51343e803e903e90350c01f4cffe803e903d010c1458a85496b1c17cb8b04a30bffcb8b0a0822625a005e82a8005ef3cb8b0c935c2c07cb8b1a08421041a543232c7f2cfd4017e808873c59400f3c5bd00325c60063232c14933c59c3e80b2dab33260103ec01004f214013e809633c58073c5b3327b552000705279a018a182107362d09cc8cb1f5230cb3f58fa025007cf165007cf16c9718010c8cb0524cf165006fa0215cb6a14ccc971fb0010241023000e10491038375f040076c200b08e218210d53276db708010c8cb055008cf165004fa0216cb6a12cb1f12cb3fc972fb0093356c21e203c85004fa0258cf1601cf16ccc9ed549c46c72f} B>boc PUSHREF	//  sender_address query_id amount wallet_owner in_msg_body _96 _97
-      s2 s3 XCHG	//  sender_address query_id amount in_msg_body wallet_owner _96 _97
+      MYADDR	//  sender_address query_id amount wallet_owner in_msg_body _99
+      B{b5ee9c724102120100033f000114ff00f4a413f4bcf2c80b0102016202030202cc0405001ba0f605da89a1f401f481f481a8610201d40607020120080900c30831c02497c138007434c0c05c6c2544d7c0fc03383e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7e08403e29fa954882ea54c4d167c0278208405e3514654882ea58c511100fc02b80d60841657c1ef2ea4d67c02f817c12103fcbc2000113e910c1c2ebcb853600201200a0b0083d40106b90f6a2687d007d207d206a1802698fc1080bc6a28ca9105d4108420834a809dd0958f97162e99f98fd001809d02811e428027d012c678b00e78b6664f6aa401f1503d33ffa00fa4021f001ed44d0fa00fa40fa40d4305136a1522ac705f2e2c128c2fff2e2c254344270542013541403c85004fa0258cf1601cf16ccc922c8cb0112f400f400cb00c920f9007074c8cb02ca07cbffc9d004fa40f40431fa0020d749c200f2e2c4778018c8cb055008cf1670fa0217cb6b13cc80c0201200d0e00ae8210178d4519c8cb1f19cb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25008a813a08208989680aa008208989680a0a014bcf2e2c504c98040fb001023c85004fa0258cf1601cf16ccc9ed5403f73b51343e803e903e90350c0234cffe80145468017e903e9014d6f1c1551cdb5c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0327e401c1d3232c0b281f2fff274140371c1472c7cb8b0c2be80146a2860822625a020822625a004ad822860822625a028062849f8c3c975c2c070c008e00f101100f13b51343e803e903e90350c01f4cffe803e903d010c1458a85496b1c17cb8b04a30bffcb8b0a0822625a005e82a8005ef3cb8b0c935c2c07cb8b1a08421041a543232c7f2cfd4017e808873c59400f3c5bd00325c60063232c14933c59c3e80b2dab33260103ec01004f214013e809633c58073c5b3327b552000705279a018a182107362d09cc8cb1f5230cb3f58fa025007cf165007cf16c9718010c8cb0524cf165006fa0215cb6a14ccc971fb0010241023000e10491038375f040076c200b08e218210d53276db708010c8cb055008cf165004fa0216cb6a12cb1f12cb3fc972fb0093356c21e203c85004fa0258cf1601cf16ccc9ed549c46c72f} B>boc PUSHREF	//  sender_address query_id amount wallet_owner in_msg_body _99 _100
+      s2 s3 XCHG	//  sender_address query_id amount in_msg_body wallet_owner _99 _100
       jetton_wallet:calculate_address INLINECALLDICT	//  sender_address query_id amount in_msg_body expected_wallet_address
       s0 s4 XCHG2	//  in_msg_body query_id amount expected_wallet_address sender_address
-      SDEQ	//  in_msg_body query_id amount _100
+      SDEQ	//  in_msg_body query_id amount _103
       74 THROWIFNOT
       get_total_supply INLINECALLDICT	//  in_msg_body query_id amount total_supply
       SWAP	//  in_msg_body query_id total_supply amount
       SUB	//  in_msg_body query_id total_supply
       DUP	//  in_msg_body query_id total_supply total_supply
       set_total_supply INLINECALLDICT
-      10000000 PUSHINT	//  in_msg_body query_id total_supply _106
-      SWAP	//  in_msg_body query_id _106 total_supply
-      ADD	//  in_msg_body query_id _107
-      0 PUSHINT	//  in_msg_body query_id _107 _108=0
+      10000000 PUSHINT	//  in_msg_body query_id total_supply _109
+      SWAP	//  in_msg_body query_id _109 total_supply
+      ADD	//  in_msg_body query_id _110
+      0 PUSHINT	//  in_msg_body query_id _110 _111=0
       RAWRESERVE
       SWAP	//  query_id in_msg_body
       LDMSGADDR	//  query_id recipient in_msg_body
-      LDOPTREF	//  query_id recipient _243 _242
+      LDOPTREF	//  query_id recipient _246 _245
       DROP	//  query_id recipient custom_payload
-      0x71c6af6b PUSHINT	//  query_id recipient custom_payload _117
-      0 PUSHINT	//  query_id recipient custom_payload _117 _118=0
-      0x10 PUSHINT	//  query_id recipient custom_payload _117 _118=0 _119
-      NEWC	//  query_id recipient custom_payload _117 _118=0 _119 _120
-      6 STU	//  query_id recipient custom_payload _117 _118=0 _122
-      s0 s4 XCHG2	//  query_id _118=0 custom_payload _117 _122 recipient
-      STSLICER	//  query_id _118=0 custom_payload _117 _123
-      s3 PUSH	//  query_id _118=0 custom_payload _117 _123 _124=0
-      STVARUINT16	//  query_id _118=0 custom_payload _117 _125
-      s1 s3 XCHG	//  query_id _117 custom_payload _118=0 _125
-      107 STU	//  query_id _117 custom_payload _139
-      s1 s2 XCHG	//  query_id custom_payload _117 _139
-      32 STU	//  query_id custom_payload _141
-      s1 s2 XCHG	//  custom_payload query_id _141
-      64 STU	//  custom_payload _143
-      STOPTREF	//  _144
+      0x71c6af6b PUSHINT	//  query_id recipient custom_payload _120
+      0 PUSHINT	//  query_id recipient custom_payload _120 _121=0
+      0x10 PUSHINT	//  query_id recipient custom_payload _120 _121=0 _122
+      NEWC	//  query_id recipient custom_payload _120 _121=0 _122 _123
+      6 STU	//  query_id recipient custom_payload _120 _121=0 _125
+      s0 s4 XCHG2	//  query_id _121=0 custom_payload _120 _125 recipient
+      STSLICER	//  query_id _121=0 custom_payload _120 _126
+      s3 PUSH	//  query_id _121=0 custom_payload _120 _126 _127=0
+      STVARUINT16	//  query_id _121=0 custom_payload _120 _128
+      s1 s3 XCHG	//  query_id _120 custom_payload _121=0 _128
+      107 STU	//  query_id _120 custom_payload _142
+      s1 s2 XCHG	//  query_id custom_payload _120 _142
+      32 STU	//  query_id custom_payload _144
+      s1 s2 XCHG	//  custom_payload query_id _144
+      64 STU	//  custom_payload _146
+      STOPTREF	//  _147
       ENDC	//  excesses_message
-      128 PUSHINT	//  excesses_message _146
+      128 PUSHINT	//  excesses_message _149
       SENDRAWMSG
     }>	//  msg_value fwd_fee sender_address op query_id in_msg_body
-    0x2c76b973 PUSHINT	//  msg_value fwd_fee sender_address op query_id in_msg_body _148
-    s1 s3 XCHG	//  msg_value fwd_fee sender_address in_msg_body query_id op _148
-    EQUAL	//  msg_value fwd_fee sender_address in_msg_body query_id _149
+    0x2c76b973 PUSHINT	//  msg_value fwd_fee sender_address op query_id in_msg_body _151
+    s1 s3 XCHG	//  msg_value fwd_fee sender_address in_msg_body query_id op _151
+    EQUAL	//  msg_value fwd_fee sender_address in_msg_body query_id _152
     IFJMP:<{	//  msg_value fwd_fee sender_address in_msg_body query_id
-      10000000 PUSHINT	//  msg_value fwd_fee sender_address in_msg_body query_id _151
-      s1 s4 XCHG	//  msg_value query_id sender_address in_msg_body fwd_fee _151
-      ADD	//  msg_value query_id sender_address in_msg_body _152
-      s1 s4 XCHG	//  in_msg_body query_id sender_address msg_value _152
-      GREATER	//  in_msg_body query_id sender_address _153
+      10000000 PUSHINT	//  msg_value fwd_fee sender_address in_msg_body query_id _154
+      s1 s4 XCHG	//  msg_value query_id sender_address in_msg_body fwd_fee _154
+      ADD	//  msg_value query_id sender_address in_msg_body _155
+      s1 s4 XCHG	//  in_msg_body query_id sender_address msg_value _155
+      GREATER	//  in_msg_body query_id sender_address _156
       75 THROWIFNOT
       s0 s2 XCHG	//  sender_address query_id in_msg_body
       LDMSGADDR	//  sender_address query_id owner_address in_msg_body
-      1 LDU	//  sender_address query_id owner_address _247 _246
+      1 LDU	//  sender_address query_id owner_address _250 _249
       DROP	//  sender_address query_id owner_address include_address?
       IF:<{	//  sender_address query_id owner_address
-        NEWC	//  sender_address query_id owner_address _164
-        OVER	//  sender_address query_id owner_address _164 owner_address
-        STSLICER	//  sender_address query_id owner_address _165
-        ENDC	//  sender_address query_id owner_address _163
+        NEWC	//  sender_address query_id owner_address _167
+        OVER	//  sender_address query_id owner_address _167 owner_address
+        STSLICER	//  sender_address query_id owner_address _168
+        ENDC	//  sender_address query_id owner_address _166
       }>ELSE<{	//  sender_address query_id owner_address
-        PUSHNULL	//  sender_address query_id owner_address _163
+        PUSHNULL	//  sender_address query_id owner_address _166
       }>	//  sender_address query_id owner_address included_address
-      0xd1735400 PUSHINT	//  sender_address query_id owner_address included_address _169
-      0 PUSHINT	//  sender_address query_id owner_address included_address _169 _170=0
-      0x18 PUSHINT	//  sender_address query_id owner_address included_address _169 _170=0 _171
-      NEWC	//  sender_address query_id owner_address included_address _169 _170=0 _171 _172
-      6 STU	//  sender_address query_id owner_address included_address _169 _170=0 _174
-      s0 s6 XCHG2	//  _170=0 query_id owner_address included_address _169 _174 sender_address
-      STSLICER	//  _170=0 query_id owner_address included_address _169 _175
-      s5 PUSH	//  _170=0 query_id owner_address included_address _169 _175 _176=0
-      STVARUINT16	//  _170=0 query_id owner_address included_address _169 _177
-      s1 s5 XCHG	//  _169 query_id owner_address included_address _170=0 _177
-      107 STU	//  _169 query_id owner_address included_address _191
-      s1 s4 XCHG	//  included_address query_id owner_address _169 _191
-      32 STU	//  included_address query_id owner_address _193
-      s1 s2 XCHG	//  included_address owner_address query_id _193
+      0xd1735400 PUSHINT	//  sender_address query_id owner_address included_address _172
+      0 PUSHINT	//  sender_address query_id owner_address included_address _172 _173=0
+      0x18 PUSHINT	//  sender_address query_id owner_address included_address _172 _173=0 _174
+      NEWC	//  sender_address query_id owner_address included_address _172 _173=0 _174 _175
+      6 STU	//  sender_address query_id owner_address included_address _172 _173=0 _177
+      s0 s6 XCHG2	//  _173=0 query_id owner_address included_address _172 _177 sender_address
+      STSLICER	//  _173=0 query_id owner_address included_address _172 _178
+      s5 PUSH	//  _173=0 query_id owner_address included_address _172 _178 _179=0
+      STVARUINT16	//  _173=0 query_id owner_address included_address _172 _180
+      s1 s5 XCHG	//  _172 query_id owner_address included_address _173=0 _180
+      107 STU	//  _172 query_id owner_address included_address _194
+      s1 s4 XCHG	//  included_address query_id owner_address _172 _194
+      32 STU	//  included_address query_id owner_address _196
+      s1 s2 XCHG	//  included_address owner_address query_id _196
       64 STU	//  included_address owner_address msg
       OVER	//  included_address owner_address msg owner_address
-      is_resolvable? INLINECALLDICT	//  included_address owner_address msg _196
+      is_resolvable? INLINECALLDICT	//  included_address owner_address msg _199
       IF:<{	//  included_address owner_address msg
-        MYADDR	//  included_address owner_address msg _197
-        B{b5ee9c724102120100033f000114ff00f4a413f4bcf2c80b0102016202030202cc0405001ba0f605da89a1f401f481f481a8610201d40607020120080900c30831c02497c138007434c0c05c6c2544d7c0fc03383e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7e08403e29fa954882ea54c4d167c0278208405e3514654882ea58c511100fc02b80d60841657c1ef2ea4d67c02f817c12103fcbc2000113e910c1c2ebcb853600201200a0b0083d40106b90f6a2687d007d207d206a1802698fc1080bc6a28ca9105d4108420834a809dd0958f97162e99f98fd001809d02811e428027d012c678b00e78b6664f6aa401f1503d33ffa00fa4021f001ed44d0fa00fa40fa40d4305136a1522ac705f2e2c128c2fff2e2c254344270542013541403c85004fa0258cf1601cf16ccc922c8cb0112f400f400cb00c920f9007074c8cb02ca07cbffc9d004fa40f40431fa0020d749c200f2e2c4778018c8cb055008cf1670fa0217cb6b13cc80c0201200d0e00ae8210178d4519c8cb1f19cb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25008a813a08208989680aa008208989680a0a014bcf2e2c504c98040fb001023c85004fa0258cf1601cf16ccc9ed5403f73b51343e803e903e90350c0234cffe80145468017e903e9014d6f1c1551cdb5c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0327e401c1d3232c0b281f2fff274140371c1472c7cb8b0c2be80146a2860822625a020822625a004ad822860822625a028062849f8c3c975c2c070c008e00f101100f13b51343e803e903e90350c01f4cffe803e903d010c1458a85496b1c17cb8b04a30bffcb8b0a0822625a005e82a8005ef3cb8b0c935c2c07cb8b1a08421041a543232c7f2cfd4017e808873c59400f3c5bd00325c60063232c14933c59c3e80b2dab33260103ec01004f214013e809633c58073c5b3327b552000705279a018a182107362d09cc8cb1f5230cb3f58fa025007cf165007cf16c9718010c8cb0524cf165006fa0215cb6a14ccc971fb0010241023000e10491038375f040076c200b08e218210d53276db708010c8cb055008cf165004fa0216cb6a12cb1f12cb3fc972fb0093356c21e203c85004fa0258cf1601cf16ccc9ed549c46c72f} B>boc PUSHREF	//  included_address owner_address msg _197 _198
-        s2 s3 XCHG	//  included_address msg owner_address _197 _198
-        jetton_wallet:calculate_address INLINECALLDICT	//  included_address msg _199
+        MYADDR	//  included_address owner_address msg _200
+        B{b5ee9c724102120100033f000114ff00f4a413f4bcf2c80b0102016202030202cc0405001ba0f605da89a1f401f481f481a8610201d40607020120080900c30831c02497c138007434c0c05c6c2544d7c0fc03383e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7e08403e29fa954882ea54c4d167c0278208405e3514654882ea58c511100fc02b80d60841657c1ef2ea4d67c02f817c12103fcbc2000113e910c1c2ebcb853600201200a0b0083d40106b90f6a2687d007d207d206a1802698fc1080bc6a28ca9105d4108420834a809dd0958f97162e99f98fd001809d02811e428027d012c678b00e78b6664f6aa401f1503d33ffa00fa4021f001ed44d0fa00fa40fa40d4305136a1522ac705f2e2c128c2fff2e2c254344270542013541403c85004fa0258cf1601cf16ccc922c8cb0112f400f400cb00c920f9007074c8cb02ca07cbffc9d004fa40f40431fa0020d749c200f2e2c4778018c8cb055008cf1670fa0217cb6b13cc80c0201200d0e00ae8210178d4519c8cb1f19cb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25008a813a08208989680aa008208989680a0a014bcf2e2c504c98040fb001023c85004fa0258cf1601cf16ccc9ed5403f73b51343e803e903e90350c0234cffe80145468017e903e9014d6f1c1551cdb5c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0327e401c1d3232c0b281f2fff274140371c1472c7cb8b0c2be80146a2860822625a020822625a004ad822860822625a028062849f8c3c975c2c070c008e00f101100f13b51343e803e903e90350c01f4cffe803e903d010c1458a85496b1c17cb8b04a30bffcb8b0a0822625a005e82a8005ef3cb8b0c935c2c07cb8b1a08421041a543232c7f2cfd4017e808873c59400f3c5bd00325c60063232c14933c59c3e80b2dab33260103ec01004f214013e809633c58073c5b3327b552000705279a018a182107362d09cc8cb1f5230cb3f58fa025007cf165007cf16c9718010c8cb0524cf165006fa0215cb6a14ccc971fb0010241023000e10491038375f040076c200b08e218210d53276db708010c8cb055008cf165004fa0216cb6a12cb1f12cb3fc972fb0093356c21e203c85004fa0258cf1601cf16ccc9ed549c46c72f} B>boc PUSHREF	//  included_address owner_address msg _200 _201
+        s2 s3 XCHG	//  included_address msg owner_address _200 _201
+        jetton_wallet:calculate_address INLINECALLDICT	//  included_address msg _202
         STSLICER	//  included_address msg
       }>ELSE<{	//  included_address owner_address msg
         0 PUSHINT
-        s2 POP	//  included_address _201=0 msg
+        s2 POP	//  included_address _204=0 msg
         2 STU	//  included_address msg
       }>
-      STOPTREF	//  _204
-      ENDC	//  _205
-      64 PUSHINT	//  _205 _206
+      STOPTREF	//  _207
+      ENDC	//  _208
+      64 PUSHINT	//  _208 _209
       SENDRAWMSG
     }>	//  msg_value fwd_fee sender_address in_msg_body query_id
     5 BLKDROP	// 
-    16 PUSHPOW2DEC	//  _208=65535
+    16 PUSHPOW2DEC	//  _211=65535
     THROWANY
   }>
   get_jetton_data PROC:<{
