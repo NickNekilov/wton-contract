@@ -1,0 +1,26 @@
+wton_minter:
+  data: fift/minter_data.fif
+  func:
+    - ../func/common/chains.fc
+    - ../func/common/op-codes.fc
+    - ../func/jetton-minter.generated.fc
+    - func/helpers.func
+    - ../func/common/packers.fc
+    - ../func/common/messages.fc
+    - ../func/jetton-minter.fc
+  tests:
+    - tests/minter-tests.func
+    - tests/tep-89.func
+
+jetton_wallet:
+  data: fift/wallet_data.fif
+  func:
+    - ../func/common/chains.fc
+    - ../func/common/op-codes.fc
+    - func/helpers.func
+    - ../func/common/packers.fc
+    - ../func/common/messages.fc
+    - ../func/jetton-wallet.fc
+  tests:
+    - tests/wallet-tests.func
+    - tests/wallet-tests-int.func
