@@ -1,0 +1,189 @@
+#include "../func/helpers.func";
+
+_ assert_provide_resp(int code, int query_id, slice exp_dst, slice exp_addr, slice owner) impure inline {
+    tuple actions = parse_c5();
+
+    throw_if(code, actions.null?());
+    throw_unless(code + 1, actions.tuple_length() == 1);
+
+    tuple action = actions.first();
+    ;; Action type is message
+    throw_unless(code + 2, action.first() == 0);
+    ;; Message mode
+    throw_unless(code + 3, action.third() == 64);
+
+    tuple parsed = action.second().parse_internal_message().unsafe_tuple();
+
+    ;; Source address match
+    throw_unless(code + 4, equal_slices(exp_dst, parsed.at(4)));
+
+    ;; Testing body
+    slice bs = parsed.at(8);
+    throw_unless(code + 5, op_take_wallet_address == bs~load_uint(32));
+    throw_unless(code + 6, query_id == bs~load_uint(64));
+    throw_unless(code + 7, equal_slices(exp_addr, bs~load_msg_addr()));
+
+    cell owner_cell = bs~load_dict();
+    if( owner.null?() ) {
+        throw_unless(code + 8, owner.null?());
+    }
+    else {
+        throw_unless(code + 9, equal_slices(owner, owner_cell.begin_parse()));
+    }
+
+    throw_unless(code + 11, bs.slice_empty?());
+
+}
+
+builder generate_provide_wallet(int query_id, slice addr, int include?) {
+    return generate_internal_message_body(op_provide_wallet_address, query_id).store_slice(addr).store_uint(include?, 1);
+}
+
+int test_provide_wallet_address(int msg_value, int fwd_fee, builder body, slice src, int exp_fail?) {
+    int  gas = 0;
+    cell msg = generate_internal_message_custom(false, msg_value, false, body, src, null(), fwd_fee);
+
+    if ( exp_fail? ) {
+        gas      = invoke_method_expect_fail(recv_internal, [msg_value, msg_value, msg, body.end_cell().begin_parse()]);
+    }
+    else {
+        (gas, _) = invoke_method(recv_internal, [msg_value, msg_value, msg, body.end_cell().begin_parse()]);
+    }
+
+    return gas;
+}
+
+int __test_provide_wallet_address_no_gas() {
+    int query_id  = rand(12345) + 1;
+    int fwd_fee   = one_unit / 10;
+    int excess    = 1;
+    int msg_value = muldiv(fwd_fee, 3, 2) + excess; ;; No gas consumption included
+    slice src     = generate_internal_address();
+    slice addr    = generate_internal_address_with_custom_data(0, workchain(), random());
+    builder body  = generate_provide_wallet(query_id, addr, false);
+
+    int gas_fail    = test_provide_wallet_address(msg_value, fwd_fee, body, src, true);
+
+    int gas_success = test_provide_wallet_address(msg_value + jetton_gas_fee, fwd_fee, body, src, false);
+
+    return gas_fail + gas_success;
+}
+
+int __test_provide_wallet_address_no_fwd_fee() {
+    int query_id = rand(12345) + 1;
+    int fwd_fee   = one_unit / 10;
+    int excess    = 1;
+    ;; Fwd fee not included
+    int msg_value = jetton_gas_fee + excess;
+
+    slice addr    = generate_internal_address_with_custom_data(0, workchain(), random());
+    slice src     = generate_internal_address();
+
+    builder body  = generate_provide_wallet(query_id, addr, false);
+
+    int gas_fail  = test_provide_wallet_address(msg_value, fwd_fee, body, src,  true);
+
+    ;; Fwd fee added just once but 3/2 * fwd_fee is reqired
+    gas_fail       += test_provide_wallet_address(msg_value + fwd_fee, fwd_fee, body, src, true);
+
+    ;; Now proper msg value
+    int gas_success = test_provide_wallet_address(msg_value + muldiv(fwd_fee, 3, 2), fwd_fee, body, src, false);
+
+
+    return gas_fail + gas_success;
+
+}
+
+int __test_provide_wallet_address_no_excess() {
+    int query_id = rand(12345) + 1;
+    int fwd_fee   = one_unit / 10;
+    int excess    = 1;
+    ;; Everything included, but msg value has to be > than this value.
+    int msg_value = jetton_gas_fee + muldiv(fwd_fee, 3, 2);
+
+    slice addr    = generate_internal_address_with_custom_data(0, workchain(), random());
+    slice src     = generate_internal_address();
+
+    builder body  = generate_provide_wallet(query_id, addr, false);
+
+    int gas_fail    = test_provide_wallet_address(msg_value, fwd_fee, body, src, true);
+
+    int gas_success = test_provide_wallet_address(msg_value + 1, fwd_fee, body, src, false);
+
+
+    return gas_fail + gas_success;
+
+}
+
+int __test_provide_wallet_address_not_included() {
+
+    int query_id = rand(12345) + 1;
+    int fwd_fee   = one_unit / 10;
+    int excess    = 1;
+    int msg_value = jetton_gas_fee + muldiv(fwd_fee, 3, 2) + excess;
+
+    slice addr    = generate_internal_address_with_custom_data(0, workchain(), random());
+    slice src     = generate_internal_address();
+
+    var (gas_lookup, stack) = invoke_method(get_wallet_address, [addr]);
+    slice exp_addr = stack.first();
+
+    builder body   = generate_provide_wallet(query_id, addr, false);
+
+    int gas_prov   = test_provide_wallet_address(msg_value, fwd_fee, body, src, false);
+
+    assert_provide_resp(300, query_id, src, exp_addr, null());
+
+    return gas_lookup + gas_prov;
+}
+
+int __test_provide_wallet_address_included() {
+
+    ;; Same but with owner included
+    int query_id = rand(12345) + 1;
+    int fwd_fee   = one_unit / 10;
+    int excess    = 1;
+    int msg_value = jetton_gas_fee + muldiv(fwd_fee, 3, 2) + excess;
+
+    slice addr    = generate_internal_address_with_custom_data(0, workchain(), random());
+    slice src     = generate_internal_address();
+
+    var (gas_lookup, stack) = invoke_method(get_wallet_address, [addr]);
+    slice exp_addr = stack.first();
+
+    ;; Include owner address in response
+    builder body   = generate_provide_wallet(query_id, addr, 1);
+
+    int gas_prov   = test_provide_wallet_address(msg_value, fwd_fee, body, src, false);
+
+    assert_provide_resp(300, query_id, src, exp_addr, addr);
+
+    return gas_lookup + gas_prov;
+
+}
+
+int __test_provide_wallet_address_wrong_chain() {
+
+    ;; Case with address on different workchain specified
+    int query_id = rand(12345) + 1;
+    int fwd_fee   = one_unit / 10;
+    int excess    = 1;
+    int msg_value = jetton_gas_fee + muldiv(fwd_fee, 3, 2) + excess;
+    int wc        = ~ workchain(); ;; Different workchain
+
+    slice addr    = generate_internal_address_with_custom_data(0, wc, random());
+    slice src     = generate_internal_address();
+
+    ;; Expecting addr_none as result
+    slice exp_addr = generate_empty_address();
+
+    ;; Note that included owner address should still be present as is
+    builder body   = generate_provide_wallet(query_id, addr, 1);
+
+    int gas_prov   = test_provide_wallet_address(msg_value, fwd_fee, body, src, false);
+
+    assert_provide_resp(300, query_id, src, exp_addr, addr);
+
+    return gas_prov;
+
+}
